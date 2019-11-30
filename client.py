@@ -48,29 +48,29 @@ if __name__ == '__main__':
     img_size = dataset_train[0][0].shape
 
     # build model
-    if args.new:
-        if args.model == 'cnn' and args.dataset == 'cifar':
-            net_glob = CNNCifar(args=args).to(args.device)
-        elif args.model == 'cnn' and args.dataset == 'mnist':
-            net_glob = CNNMnist(args=args).to(args.device)
-        elif args.model == 'mlp':
-            len_in = 1
-            for x in img_size:
-                len_in *= x
-            net_glob = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
-        else:
-            exit('Error: unrecognized model')
-        print(net_glob)
-        net_glob.train()
-
-
-        net_local=copy.deepcopy(net_glob).to(args.device)
+    print(args.new)
+    print(type(args.new))
+    if args.model == 'cnn' and args.dataset == 'cifar':
+        net_local = CNNCifar(args=args).to(args.device)
+    elif args.model == 'cnn' and args.dataset == 'mnist':
+        net_local = CNNMnist(args=args).to(args.device)
+    elif args.model == 'mlp':
+        len_in = 1
+        for x in img_size:
+            len_in *= x
+        net_local = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
     else:
-        net_local=torch.load('./LocalModel/local{}.pth'.format(args.idx))
+        exit('Error: unrecognized model')
+    if args.new:
+        print(net_local)
+        net_local.train()
+    else:
+        net_local.load_state_dict(torch.load('./LocalModel/local{}.pth'.format(args.idx)))
 
 
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
-    w, loss = local.train(net=copy.deepcopy(net_glob).to(args.device))
+    w, loss = local.train(net=copy.deepcopy(net_local))
+    print(loss)
 
     #w_locals.append(copy.deepcopy(w))
     #loss_locals.append(copy.deepcopy(loss))

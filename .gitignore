@@ -1,2 +1,4 @@
 .DS_Store
 *.pth
+data/mnisy/MNIST/
+data/mnist/MNIST/
