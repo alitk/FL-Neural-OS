@@ -18,6 +18,8 @@ import os
 
 
 
+
+
 if __name__ == '__main__':
     # parse args
     args = args_parser()
@@ -26,8 +28,8 @@ if __name__ == '__main__':
     # load dataset and split users
     if args.dataset == 'mnist':
         trans_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-        dataset_train = datasets.MNIST('../data/mnist/', train=True, download=True, transform=trans_mnist)
-        dataset_test = datasets.MNIST('../data/mnist/', train=False, download=True, transform=trans_mnist)
+        dataset_train = datasets.MNIST('./data/mnist/', train=True, download=True, transform=trans_mnist)
+        dataset_test = datasets.MNIST('./data/mnist/', train=False, download=True, transform=trans_mnist)
         # sample users
         if args.iid:
             dict_users = mnist_iid(dataset_train, args.num_users)
@@ -35,8 +37,8 @@ if __name__ == '__main__':
             dict_users = mnist_noniid(dataset_train, args.num_users)
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-        dataset_train = datasets.CIFAR10('../data/cifar', train=True, download=True, transform=trans_cifar)
-        dataset_test = datasets.CIFAR10('../data/cifar', train=False, download=True, transform=trans_cifar)
+        dataset_train = datasets.CIFAR10('./data/cifar', train=True, download=True, transform=trans_cifar)
+        dataset_test = datasets.CIFAR10('./data/cifar', train=False, download=True, transform=trans_cifar)
         if args.iid:
             dict_users = cifar_iid(dataset_train, args.num_users)
         else:
@@ -46,21 +48,25 @@ if __name__ == '__main__':
     img_size = dataset_train[0][0].shape
 
     # build model
-    if args.model == 'cnn' and args.dataset == 'cifar':
-        net_glob = CNNCifar(args=args).to(args.device)
-    elif args.model == 'cnn' and args.dataset == 'mnist':
-        net_glob = CNNMnist(args=args).to(args.device)
-    elif args.model == 'mlp':
-        len_in = 1
-        for x in img_size:
-            len_in *= x
-        net_glob = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
-    else:
-        exit('Error: unrecognized model')
-    print(net_glob)
-    net_glob.train()
+    if args.new:
+        if args.model == 'cnn' and args.dataset == 'cifar':
+            net_glob = CNNCifar(args=args).to(args.device)
+        elif args.model == 'cnn' and args.dataset == 'mnist':
+            net_glob = CNNMnist(args=args).to(args.device)
+        elif args.model == 'mlp':
+            len_in = 1
+            for x in img_size:
+                len_in *= x
+            net_glob = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
+        else:
+            exit('Error: unrecognized model')
+        print(net_glob)
+        net_glob.train()
 
-    net_local=copy.deepcopy(net_glob).to(args.device)
+
+        net_local=copy.deepcopy(net_glob).to(args.device)
+    else:
+        net_local=torch.load('./LocalModel/local{}.pth'.format(args.idx))
 
 
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
