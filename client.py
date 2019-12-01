@@ -32,15 +32,15 @@ if __name__ == '__main__':
         dataset_test = datasets.MNIST('./data/mnist/', train=False, download=True, transform=trans_mnist)
         # sample users
         if args.iid:
-            dict_users = mnist_iid(dataset_train, args.num_users)
+            dict_users = mnist_iid(dataset_train, args.num_users, 25)
         else:
-            dict_users = mnist_noniid(dataset_train, args.num_users)
+            dict_users = mnist_noniid(dataset_train, args.num_users, 25)
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('./data/cifar', train=True, download=True, transform=trans_cifar)
         dataset_test = datasets.CIFAR10('./data/cifar', train=False, download=True, transform=trans_cifar)
         if args.iid:
-            dict_users = cifar_iid(dataset_train, args.num_users)
+            dict_users = cifar_iid(dataset_train, args.num_users, 25)
         else:
             exit('Error: only consider IID setting in CIFAR10')
     else:

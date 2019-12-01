@@ -6,13 +6,15 @@
 import numpy as np
 from torchvision import datasets, transforms
 
-def mnist_iid(dataset, num_users):
+def mnist_iid(dataset, num_users, seed):
     """
     Sample I.I.D. client data from MNIST dataset
     :param dataset:
     :param num_users:
+    :param seed: random seed used for sampling
     :return: dict of image index
     """
+    np.random.seed(seed)
     num_items = int(len(dataset)/num_users)
     dict_users, all_idxs = {}, [i for i in range(len(dataset))]
     for i in range(num_users):
@@ -21,13 +23,15 @@ def mnist_iid(dataset, num_users):
     return dict_users
 
 
-def mnist_noniid(dataset, num_users):
+def mnist_noniid(dataset, num_users, seed):
     """
     Sample non-I.I.D client data from MNIST dataset
     :param dataset:
     :param num_users:
+    :param seed: random seed used for sampling
     :return:
     """
+    np.random.seed(seed)
     num_shards, num_imgs = 200, 300
     idx_shard = [i for i in range(num_shards)]
     dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
@@ -48,13 +52,16 @@ def mnist_noniid(dataset, num_users):
     return dict_users
 
 
-def cifar_iid(dataset, num_users):
+def cifar_iid(dataset, num_users, seed):
     """
     Sample I.I.D. client data from CIFAR10 dataset
     :param dataset:
     :param num_users:
+    :param seed: random seed used for sampling    
     :return: dict of image index
     """
+    np.random.seed(seed)
+
     num_items = int(len(dataset)/num_users)
     dict_users, all_idxs = {}, [i for i in range(len(dataset))]
     for i in range(num_users):
