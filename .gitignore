@@ -1,4 +1,5 @@
 .DS_Store
 *.pth
+*.pyc
 data/mnisy/MNIST/
 data/mnist/MNIST/
