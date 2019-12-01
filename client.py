@@ -60,12 +60,12 @@ if __name__ == '__main__':
         net_local = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
     else:
         exit('Error: unrecognized model')
+    
     if args.new:
-        print(net_local)
-        
-
+        print('======created a new model========:\n',net_local)
     else:
-        net_local.load_state_dict(torch.load('./LocalModel/local{}.pth'.format(args.idx)))
+        checkpoint = torch.load('./LocalModel/local{}.pth'.format(args.idx))
+        net_local.load_state_dict(checkpoint['state_dict'])
 
 
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
@@ -76,10 +76,13 @@ if __name__ == '__main__':
     #loss_locals.append(copy.deepcopy(loss))
     #w['epoch']=0
     if args.new:
-        w['epochs_v']=args.local_ep
+        checkpoint = {'epochs_v': args.local_ep,
+          'state_dict': w}
+
     else:
-        w['epochs_v']+=args.local_ep
-    torch.save(w, './LocalModel/local{}.pth'.format(args.idx))
+        checkpoint['epochs_v']+=args.local_ep
+
+    torch.save(checkpoint, './LocalModel/local{}.pth'.format(args.idx))
 
         
 
