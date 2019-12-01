@@ -20,6 +20,7 @@ def mnist_iid(dataset, num_users, seed):
     for i in range(num_users):
         dict_users[i] = set(np.random.choice(all_idxs, num_items, replace=False))
         all_idxs = list(set(all_idxs) - dict_users[i])
+
     return dict_users
 
 
@@ -78,3 +79,4 @@ if __name__ == '__main__':
                                    ]))
     num = 100
     d = mnist_noniid(dataset_train, num)
+

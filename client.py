@@ -22,6 +22,8 @@ import os
 
 if __name__ == '__main__':
     # parse args
+    #sample run code
+    #python client.py --new t --idx 5 --verbose --num_users 10 --iid
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
@@ -67,7 +69,6 @@ if __name__ == '__main__':
         checkpoint = torch.load('./LocalModel/local{}.pth'.format(args.idx))
         net_local.load_state_dict(checkpoint['state_dict'])
 
-
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
@@ -83,6 +84,7 @@ if __name__ == '__main__':
         checkpoint['epochs_v']+=args.local_ep
 
     torch.save(checkpoint, './LocalModel/local{}.pth'.format(args.idx))
+
 
         
 
