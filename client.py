@@ -32,15 +32,15 @@ if __name__ == '__main__':
         dataset_test = datasets.MNIST('./data/mnist/', train=False, download=True, transform=trans_mnist)
         # sample users
         if args.iid:
-            dict_users = mnist_iid(dataset_train, args.num_users, 25)
+            dict_users = mnist_iid(dataset_train, args.num_users, args.seed)
         else:
-            dict_users = mnist_noniid(dataset_train, args.num_users, 25)
+            dict_users = mnist_noniid(dataset_train, args.num_users, args.seed)
     elif args.dataset == 'cifar':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         dataset_train = datasets.CIFAR10('./data/cifar', train=True, download=True, transform=trans_cifar)
         dataset_test = datasets.CIFAR10('./data/cifar', train=False, download=True, transform=trans_cifar)
         if args.iid:
-            dict_users = cifar_iid(dataset_train, args.num_users, 25)
+            dict_users = cifar_iid(dataset_train, args.num_users, args.seed)
         else:
             exit('Error: only consider IID setting in CIFAR10')
     else:
@@ -48,8 +48,7 @@ if __name__ == '__main__':
     img_size = dataset_train[0][0].shape
 
     # build model
-    print(args.new)
-    print(type(args.new))
+
     if args.model == 'cnn' and args.dataset == 'cifar':
         net_local = CNNCifar(args=args).to(args.device)
     elif args.model == 'cnn' and args.dataset == 'mnist':
@@ -63,7 +62,8 @@ if __name__ == '__main__':
         exit('Error: unrecognized model')
     if args.new:
         print(net_local)
-        net_local.train()
+        
+
     else:
         net_local.load_state_dict(torch.load('./LocalModel/local{}.pth'.format(args.idx)))
 
@@ -75,9 +75,11 @@ if __name__ == '__main__':
     #w_locals.append(copy.deepcopy(w))
     #loss_locals.append(copy.deepcopy(loss))
     #w['epoch']=0
-
+    if args.new:
+        w['epochs_v']=args.local_ep
+    else:
+        w['epochs_v']+=args.local_ep
     torch.save(w, './LocalModel/local{}.pth'.format(args.idx))
 
-        
         
 

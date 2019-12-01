@@ -20,8 +20,6 @@ def args_parser():
     # federated arguments
     parser.add_argument('--new', type=str2bool, default=False, help="wheter create a cew neural network or used the saved one")
 
-
-
     parser.add_argument('--epochs', type=int, default=10, help="rounds of training")
     parser.add_argument('--num_users', type=int, default=100, help="number of users: K")
     parser.add_argument('--frac', type=float, default=0.1, help="the fraction of clients: C")
