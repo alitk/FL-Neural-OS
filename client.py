@@ -23,7 +23,8 @@ import os
 if __name__ == '__main__':
     # parse args
     #sample run code
-    #python client.py --new t --idx 5 --verbose --num_users 10 --iid
+    #python client.py --new t --idx 5 --verbose --num_users 10 --iid --local_bs 60
+    # remember the local_bs is going to be multiplied by 10.
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
@@ -72,6 +73,10 @@ if __name__ == '__main__':
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
+    net_local.load_state_dict(w)
+    #acc_train, loss_train = test_img(net_local, dataset_train, args)
+    #print("Training accuracy: {:.2f}".format(acc_train))
+    #print("Testing accuracy: {:.2f}".format(acc_test))
 
     #w_locals.append(copy.deepcopy(w))
     #loss_locals.append(copy.deepcopy(loss))
@@ -83,8 +88,10 @@ if __name__ == '__main__':
     else:
         checkpoint['epochs_v']+=args.local_ep
 
-    torch.save(checkpoint, './LocalModel/local{}.pth'.format(args.idx))
+    torch.save(checkpoint, args.local_dir+'local{}.pth'.format(args.idx))
+
 
 
         
 
+    

@@ -12,7 +12,7 @@ from torchvision import datasets, transforms
 import torch
 
 from utils.sampling import mnist_iid, mnist_noniid, cifar_iid
-from utils.options import args_parser
+from utils.options import args_parser, empty_folder
 from models.Update import LocalUpdate
 from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
@@ -58,8 +58,9 @@ if __name__ == '__main__':
     m = max(int(args.frac * args.num_users), 1)
     idxs_users = np.random.choice(range(args.num_users), m, replace=False)
     for idx in range(args.num_users):
-        path='./LocalModel/local{}.pth'.format(idx)
-        w=torch.load(path)
+        path=args.local_dir+'local{}.pth'.format(idx)
+        checkpoint = torch.load(path)
+        w=checkpoint['state_dict']
         w_locals.append(copy.deepcopy(w))
     # update global weights
     w_glob = FedAvg(w_locals)
@@ -72,4 +73,8 @@ if __name__ == '__main__':
     acc_test, loss_test = test_img(net_glob, dataset_test, args)
     #print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
+
+
+    torch.save(w_glob, args.saveto+"AvgModel.pth")
+    empty_folder(args.local_dir)
 
