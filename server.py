@@ -76,5 +76,6 @@ if __name__ == '__main__':
 
 
     torch.save(w_glob, args.saveto+"AvgModel.pth")
-    empty_folder(args.local_dir)
+    if rm_local:
+        empty_folder(args.local_dir)
 

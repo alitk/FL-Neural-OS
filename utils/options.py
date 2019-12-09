@@ -43,7 +43,7 @@ def args_parser():
     #path arguments
     parser.add_argument('--local_dir', type=str, default='./LocalModel/', help="where to load the local models from")
     parser.add_argument('--saveto', type=str, default='./AggrModel/', help="where to save the aggregated model to")
-
+    parser.add_argument('--rm_local', action='store_true', help='remove local models after aggregating them')
 
     # other arguments
     parser.add_argument('--dataset', type=str, default='mnist', help="name of dataset")
@@ -70,3 +70,6 @@ def empty_folder(folder):    # I used this post to cereate this function
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+    # Add a .gitkeep file to kettp the folder in git.
+    f= open(folder+".gitkeep","w+") 
+    f.close()
