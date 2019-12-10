@@ -52,6 +52,7 @@ if __name__ == '__main__':
 
     # build model
 
+
     if args.model == 'cnn' and args.dataset == 'cifar':
         net_local = CNNCifar(args=args).to(args.device)
     elif args.model == 'cnn' and args.dataset == 'mnist':
@@ -70,6 +71,11 @@ if __name__ == '__main__':
         checkpoint = torch.load('./LocalModel/local{}.pth'.format(args.idx))
         net_local.load_state_dict(checkpoint['state_dict'])
 
+    print(type(dataset_train))
+    data_wight=len(dataset_train)/args.num_users/100
+
+
+
     local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
@@ -81,8 +87,9 @@ if __name__ == '__main__':
     #w_locals.append(copy.deepcopy(w))
     #loss_locals.append(copy.deepcopy(loss))
     #w['epoch']=0
+
     if args.new:
-        checkpoint = {'epochs_v': args.local_ep,
+        checkpoint = {'data_weight': data_wight,
           'state_dict': w}
 
     else:
