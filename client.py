@@ -80,9 +80,10 @@ if __name__ == '__main__':
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
     net_local.load_state_dict(w)
-    #acc_train, loss_train = test_img(net_local, dataset_train, args)
-    #print("Training accuracy: {:.2f}".format(acc_train))
-    #print("Testing accuracy: {:.2f}".format(acc_test))
+    acc_train, loss_train = test_img(net_local, dataset_train, args)
+    acc_test, loss_test = test_img(net_local, dataset_test, args)
+    print("Training accuracy: {:.2f}".format(acc_train))
+    print("Testing accuracy: {:.2f}".format(acc_test))
 
     #w_locals.append(copy.deepcopy(w))
     #loss_locals.append(copy.deepcopy(loss))
