@@ -1,4 +1,4 @@
-num_users=10
+num_users=3
 import os
 
 for i in range(num_users):

@@ -10,6 +10,7 @@ import copy
 import numpy as np
 from torchvision import datasets, transforms
 import torch
+import os
 
 from utils.sampling import mnist_iid, mnist_noniid, cifar_iid
 from utils.options import args_parser, empty_folder
@@ -62,8 +63,9 @@ if __name__ == '__main__':
     w_glob = net_glob.state_dict()
 
     # training
-    
+  
     w_locals, loss_locals, w_locals_weights = [], [], []
+    '''
     m = max(int(args.frac * args.num_users), 1)
     idxs_users = np.random.choice(range(args.num_users), m, replace=False)
     for idx in range(args.num_users):
@@ -73,6 +75,20 @@ if __name__ == '__main__':
         data_weight=checkpoint['data_weight']
         w_locals.append(copy.deepcopy(w))
         w_locals_weights.append(data_weight)
+    '''
+
+    for filename in os.listdir(args.local_dir):
+        file_path = os.path.join(args.local_dir, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                checkpoint = torch.load(file_path)
+                w=checkpoint['state_dict']
+                data_weight=checkpoint['data_weight']
+                w_locals.append(copy.deepcopy(w))
+                w_locals_weights.append(data_weight)
+        except Exception as e:
+            print('Failed to read %s. Reason: %s' % (file_path, e))
+
 
     # update global weights
     w_glob = FedAvg(w_locals, w_locals_weights)

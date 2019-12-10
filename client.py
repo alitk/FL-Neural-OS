@@ -8,7 +8,7 @@ import torch
 
 from utils.sampling import mnist_iid, mnist_noniid, cifar_iid
 from utils.options import args_parser
-from models.Update import LocalUpdate
+from models.Update import LocalUpdate, DatasetSplit
 from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
 from models.test import test_img
@@ -80,7 +80,14 @@ if __name__ == '__main__':
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
     net_local.load_state_dict(w)
-    acc_train, loss_train = test_img(net_local, dataset_train, args)
+
+    #Here let's just define the trained portion of train_set for finding acccuracy
+    acc_train, loss_train = test_img(net_local, DatasetSplit(dataset_train, dict_users[args.idx]), args)
+
+
+
+
+    #acc_train, loss_train = test_img(net_local, dataset_train, args)
     acc_test, loss_test = test_img(net_local, dataset_test, args)
     print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
@@ -94,7 +101,7 @@ if __name__ == '__main__':
           'state_dict': w}
 
     else:
-        checkpoint['epochs_v']+=args.local_ep
+        pass
 
     torch.save(checkpoint, args.local_dir+'local{}.pth'.format(args.idx))
 
