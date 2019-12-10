@@ -1,0 +1,1 @@
+os.system("python server.py --num_users 3")

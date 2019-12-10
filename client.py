@@ -72,7 +72,7 @@ if __name__ == '__main__':
         net_local.load_state_dict(checkpoint['state_dict'])
 
     print(type(dataset_train))
-    data_wight=len(dataset_train)/args.num_users/100
+    data_weight=len(dataset_train)/args.num_users/100
 
 
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     #w['epoch']=0
 
     if args.new:
-        checkpoint = {'data_weight': data_wight,
+        checkpoint = {'data_weight': data_weight,
           'state_dict': w}
 
     else:
