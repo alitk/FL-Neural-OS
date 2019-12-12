@@ -68,8 +68,9 @@ if __name__ == '__main__':
     if args.new:
         print('======created a new model========:\n',net_local)
     else:
-        checkpoint = torch.load('./LocalModel/local{}.pth'.format(args.idx))
+        checkpoint = torch.load(args.base_file)
         net_local.load_state_dict(checkpoint['state_dict'])
+
 
     print(type(dataset_train))
     data_weight=len(dataset_train)/args.num_users/100

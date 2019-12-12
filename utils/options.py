@@ -44,6 +44,7 @@ def args_parser():
     parser.add_argument('--local_dir', type=str, default='./LocalModel/', help="where to load the local models from")
     parser.add_argument('--saveto', type=str, default='./AggrModel/', help="where to save the aggregated model to")
     parser.add_argument('--rm_local', action='store_true', help='remove local models after aggregating them')
+    parser.add_argument('--base_file', type=str, help='Base local model')
 
     # other arguments
     parser.add_argument('--dataset', type=str, default='mnist', help="name of dataset")
