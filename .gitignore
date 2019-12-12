@@ -3,3 +3,4 @@
 *.pyc
 data/mnisy/MNIST/
 data/mnist/MNIST/
+.vscode
