@@ -40,6 +40,12 @@ def args_parser():
     parser.add_argument('--max_pool', type=str, default='True',
                         help="Whether use max pooling rather than strided convolutions")
 
+
+    # client server arguments
+    parser.add_argument('--client', action='store_true', help='whether model is a client')
+    parser.add_argument('--server', action='store_true', help='whether model is a server')
+
+
     #path arguments
     parser.add_argument('--local_dir', type=str, default='./LocalModel/', help="where to load the local models from")
     parser.add_argument('--saveto', type=str, default='./AggrModel/', help="where to save the aggregated model to")
