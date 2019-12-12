@@ -18,7 +18,7 @@ def str2bool(v):
 def args_parser():
     parser = argparse.ArgumentParser()
     # federated arguments
-    parser.add_argument('--new', type=str2bool, default=False, help="wheter create a cew neural network or used the saved one")
+    parser.add_argument('--new', action='store_true', help="wheter create a cew neural network or used the saved one")
 
     parser.add_argument('--epochs', type=int, default=10, help="rounds of training")
     parser.add_argument('--num_users', type=int, default=100, help="number of users: K")
