@@ -10,4 +10,4 @@ RUN apt-get install python3 python3-pip -y
 RUN pip3 install -r requirements.txt
 RUN ln -s `which python3` /usr/bin/python
 
-ENTRYPOINT ["python3" "TestScript.py"]
+ENTRYPOINT ["python3" "starter.py"]
