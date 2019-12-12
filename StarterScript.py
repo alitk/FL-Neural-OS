@@ -4,10 +4,10 @@ from utils.options import args_parser
 
 #example 
 #python StarterScript.py --new --idx 5 --verbose --num_users 10 --iid --local_bs 60 --base_file ./LocalModel/local0.pth --client
-#python StarterScript.py --server
+#python StarterScript.py --server --local_dir where/to/read/ --saveto where/to/save
 
 #if you want to delete model after merging them
-#python StarterScript.py --server
+#python StarterScript.py --server --local_dir where/to/read/ --saveto where/to/save --rm_local
 
 args = args_parser()
 

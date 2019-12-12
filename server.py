@@ -18,6 +18,7 @@ from models.Update import LocalUpdate
 from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
 from models.test import test_img
+import time
 
 
 if __name__ == '__main__':
@@ -104,6 +105,13 @@ if __name__ == '__main__':
 
 
     torch.save(w_glob, args.saveto+"AvgModel.pth")
+    current = int(round(time.time() * 1000))
+    f= open(args.saveto+"stats-{}.txt".format(current),"w+") 
+    seq=["Training accuracy: {:.2f} \n".format(acc_train), "Testing accuracy: {:.2f}".format(acc_test)] 
+    f.writelines(seq)
+
+    f.close()
+
     if args.rm_local:
         empty_folder(args.local_dir)
 
