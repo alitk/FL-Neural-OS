@@ -102,7 +102,8 @@ if __name__ == '__main__':
           'state_dict': w}
 
     else:
-        pass
+        checkpoint = {'data_weight': data_weight,
+          'state_dict': w}
 
     torch.save(checkpoint, args.local_dir+'local{}.pth'.format(args.idx))
 
