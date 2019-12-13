@@ -12,4 +12,4 @@ RUN ln -s `which python3` /usr/bin/python
 
 COPY . /workspace
 
-ENTRYPOINT ["python3" "starter.py"]
+ENTRYPOINT ["python3", "StarterScript.py"]
