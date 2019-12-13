@@ -104,11 +104,19 @@ if __name__ == '__main__':
     print("Testing accuracy: {:.2f}".format(acc_test))
 
     current = int(round(time.time() * 1000))
-    torch.save(w_glob, args.saveto+"network-{}.pth".format(current))
+
+
+    data_weight = sum(w_locals_weights)
+    checkpoint = {'data_weight': data_weight,
+      'state_dict': w_glob}
+
+
+    torch.save(checkpoint, args.saveto+"network-{}.pth".format(current))
     
     f= open(args.saveto+"stats-{}.txt".format(current),"w+") 
     seq=["Training accuracy: {:.2f} \n".format(acc_train), "Testing accuracy: {:.2f}".format(acc_test)] 
     f.writelines(seq)
+
 
     f.close()
 
