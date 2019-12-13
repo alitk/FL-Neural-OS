@@ -47,5 +47,30 @@ if __name__ == '__main__':
         net_local = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
     else:
         exit('Error: unrecognized model')
+
+
+    #Let's train the model few epochs first
+
+
+    n_epochs = 3
+    batch_size_train = 64
+    batch_size_test = 1000
+    learning_rate = 0.01
+    momentum = 0.5
+    log_interval = 10
+
+    random_seed = 1
+    torch.backends.cudnn.enabled = False
+    torch.manual_seed(random_seed)
+
+    data_weight=0
     
-    torch.save(net_local.state_dict(), './BaseModel.pth')
+    w=net_local.state_dict()
+
+    checkpoint = {'data_weight': data_weight,
+      'state_dict': w}
+
+    torch.save(checkpoint, './BaseModel.pth')
+
+
+    
