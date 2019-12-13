@@ -21,7 +21,7 @@ if args.client and not(args.server):
 																										  args.num_users, args.iid*'--iid',
 																										   args.local_bs, args.base_file, args.local_dir)
 elif not(args.client) and  args.server:
-	cmd_run="python server.py"
+	cmd_run="python server.py --server --local_dir {} --saveto {} {}".format(args.local_dir, args.saveto, args.rm_local*'--rm_local')
 	
 	
 else:
