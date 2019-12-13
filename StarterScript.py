@@ -16,7 +16,7 @@ assert (args.client or args.server), "specify model e.g. --client or --server."
 
 if args.client and not(args.server):
 
-	cmd_run ="python client.py {} --idx {} {} --num_users {} {} --local_bs {} --base_file {} --local_dir".format(args.new*'--new',
+	cmd_run ="python client.py {} --idx {} {} --num_users {} {} --local_bs {} --base_file {} --local_dir {}".format(args.new*'--new',
 																										 args.idx, args.verbose*'--verbose',
 																										  args.num_users, args.iid*'--iid',
 																										   args.local_bs, args.base_file, args.local_dir)
