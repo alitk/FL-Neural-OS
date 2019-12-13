@@ -103,9 +103,9 @@ if __name__ == '__main__':
     print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
 
-
-    torch.save(w_glob, args.saveto+"AvgModel.pth")
     current = int(round(time.time() * 1000))
+    torch.save(w_glob, args.saveto+"networkstat-{}.pth".format(current))
+    
     f= open(args.saveto+"stats-{}.txt".format(current),"w+") 
     seq=["Training accuracy: {:.2f} \n".format(acc_train), "Testing accuracy: {:.2f}".format(acc_test)] 
     f.writelines(seq)
