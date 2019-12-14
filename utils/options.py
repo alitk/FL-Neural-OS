@@ -2,7 +2,14 @@
 # -*- coding: utf-8 -*-
 # Python version: 3.6
 
+from __future__ import print_function
 import argparse
+
+
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def str2bool(v):

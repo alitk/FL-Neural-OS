@@ -13,7 +13,7 @@ import torch
 import os
 
 from utils.sampling import mnist_iid, mnist_noniid, cifar_iid
-from utils.options import args_parser, empty_folder
+from utils.options import args_parser, empty_folder, eprint
 from models.Update import LocalUpdate
 from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     acc_test, loss_test = test_img(net_glob, dataset_test, args)
     if args.verbose:
         print("Training accuracy: {:.2f}".format(acc_train))
-    print("Testing accuracy: {:.2f}".format(acc_test))
+    eprint("Testing accuracy: {:.2f}".format(acc_test))
 
     current = int(round(time.time() * 1000))
 
