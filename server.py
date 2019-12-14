@@ -19,7 +19,8 @@ from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
 from models.test import test_img
 import time
-
+import warnings
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
     args = args_parser()
@@ -59,7 +60,8 @@ if __name__ == '__main__':
         net_glob = MLP(dim_in=len_in, dim_hidden=64, dim_out=args.num_classes).to(args.device)
     else:
         exit('Error: unrecognized model')
-    print(net_glob)
+    if args.verbose:
+        print(net_glob)
     net_glob.train()
     w_glob = net_glob.state_dict()
 
@@ -88,7 +90,8 @@ if __name__ == '__main__':
                 w_locals.append(copy.deepcopy(w))
                 w_locals_weights.append(data_weight)
         except Exception as e:
-            print('Failed to read %s. Reason: %s' % (file_path, e))
+            if args.verbose:
+                print('Failed to read %s. Reason: %s' % (file_path, e))
 
 
     # update global weights
@@ -100,7 +103,8 @@ if __name__ == '__main__':
     net_glob.eval()
     acc_train, loss_train = test_img(net_glob, dataset_train, args)
     acc_test, loss_test = test_img(net_glob, dataset_test, args)
-    print("Training accuracy: {:.2f}".format(acc_train))
+    if args.verbose:
+        print("Training accuracy: {:.2f}".format(acc_train))
     print("Testing accuracy: {:.2f}".format(acc_test))
 
     current = int(round(time.time() * 1000))

@@ -27,5 +27,5 @@ elif not(args.client) and  args.server:
 else:
 	"Model should be either client or server"
 
-print(cmd_run)
+#print(cmd_run)
 os.system(cmd_run)
