@@ -17,6 +17,12 @@ def str2bool(v):
 
 def args_parser():
     parser = argparse.ArgumentParser()
+
+    # Extra arguments
+    parser.add_argument('--random_idx', action='store_true', help='if assign idxs randomly')
+
+
+
     # federated arguments
     parser.add_argument('--new', action='store_true', help="wheter create a cew neural network or used the saved one")
 

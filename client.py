@@ -13,7 +13,7 @@ from models.Nets import MLP, CNNMnist, CNNCifar
 from models.Fed import FedAvg
 from models.test import test_img
 import os
-
+import random
 
 
 
@@ -76,14 +76,19 @@ if __name__ == '__main__':
     data_weight=len(dataset_train)/args.num_users/100
 
 
+    if args.random_idx:
+        idx = random.randint(0,args.num_users-1)
+    else:
+        idx = args.idx
 
-    local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[args.idx])
+
+    local = LocalUpdate(args=args, dataset=dataset_train, idxs=dict_users[idx])
     w, loss = local.train(net=copy.deepcopy(net_local))
     print(loss)
     net_local.load_state_dict(w)
 
     #Here let's just define the trained portion of train_set for finding acccuracy
-    acc_train, loss_train = test_img(net_local, DatasetSplit(dataset_train, dict_users[args.idx]), args)
+    acc_train, loss_train = test_img(net_local, DatasetSplit(dataset_train, dict_users[idx]), args)
 
 
 
@@ -105,7 +110,7 @@ if __name__ == '__main__':
         checkpoint = {'data_weight': data_weight,
           'state_dict': w}
 
-    torch.save(checkpoint, args.local_dir+'local{}.pth'.format(args.idx))
+    torch.save(checkpoint, args.local_dir+'local{}.pth'.format(idx))
 
 
 
